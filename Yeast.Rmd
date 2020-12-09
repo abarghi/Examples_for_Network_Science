@@ -1,0 +1,284 @@
+---
+title: 'Yeast Protein Interaction Network'
+subtitle: 'Examples for Teaching from *Network Science*, by Albert-Laszlo Barabasi, Cambridge University Press, 2016' 
+author: 'Amir Barghi'
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Packages
+
+```{r, message = FALSE}
+library(tidyverse)
+
+library(igraph)
+
+library(igraphdata)
+
+library(ggraph)
+
+library(latex2exp)
+```
+
+# Loading the Data Set `igraphdata::yeast`
+
+```{r}
+data(yeast)
+
+g <- yeast
+```
+
+```{r}
+V(g)
+
+E(g)
+
+components(g)$no
+
+components(g)$csize
+
+glimpse(vertex_attr(g))
+
+glimpse(edge_attr(g))
+
+vertex_attr(g, name = 'Class')[1:10]
+
+edge_attr(g, name = 'Confidence')[1:10]
+```
+
+# Visualizing the Yeast Network
+
+```{r}
+set.seed(42)
+
+ggraph(g, layout = 'lgl') + 
+  geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+  geom_node_point(color = 'dark red', size = 1, alpha = 0.75) + 
+  theme_graph(base_family = 'Helvetica') +
+  labs(title = 'Yeast Interaction Network',
+       subtitle = 'Displayed Using Layout Generator for Larger Graphs')
+```
+
+```{r}
+set.seed(42)
+
+ggraph(g, layout = 'drl') + 
+  geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+  geom_node_point(color = 'dark red', size = 1, alpha = 0.75) + 
+  theme_graph(base_family = 'Helvetica') +
+  labs(title = 'Yeast Interaction Network',
+       subtitle = 'Displayed Using Distributed Recursive Layout')
+```
+
+```{r}
+set.seed(42)
+
+ggraph(g, layout = 'mds') + 
+  geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+  geom_node_point(color = 'dark red', size = 1, alpha = 0.75) + 
+  theme_graph(base_family = 'Helvetica') +
+  labs(title = 'Yeast Interaction Network',
+       subtitle = 'Displayed Using Multidimensional Scaling Layout')
+```
+
+# Summary Statistics of the Yeast Network
+
+```{r}
+suppressMessages(df <- bind_cols(enframe(eccentricity(g)), 
+                                 enframe(betweenness(g)), 
+                                 enframe(degree(g)), 
+                                 enframe(transitivity(g, type = c('local')))))
+
+df <- df %>% select(name...1, value...2, value...4, value...6, value...8)
+
+names(df) <- c('name', 'eccentricity', 'betweenness', 'degree', 'clustering')
+
+head(df)
+
+tail(df)
+
+glimpse(df)
+```
+
+```{r}
+df %>% 
+  summarize(avg_deg = mean(degree), 
+            delta = max(degree), 
+            prop = sum(degree <= avg_deg) / n(), 
+            diam = max(eccentricity),
+            radius = min(eccentricity),
+            avg_cc = mean(clustering, na.rm = TRUE),
+            avg_distance = mean_distance(g, directed = FALSE, unconnected = TRUE))
+```
+
+```{r}
+(d <- mean_distance(g, directed = FALSE, unconnected = TRUE))
+
+mean(distances(g))
+```
+
+## Fig. 2.18(a) on p. 66
+
+```{r}
+distance_table(g)
+
+D <- data.frame(1:length(distance_table(g)$res), 
+                distance_table(g)$res / sum(distance_table(g)$res))
+
+names(D) <- c('x', 'y')
+
+D %>% 
+  ggplot(aes(x = x, y = y)) + 
+  geom_point() + 
+  geom_line(aes(x = d), color = 'blue') +
+  labs(title = 'Distribution of Distance (Proportions) in the Yeast Network') +
+  labs(x = 'distance', y = 'density')
+```
+
+## The Degree Distribution 
+
+```{r}
+df %>% 
+  ggplot(aes(x = degree, y = ..density..)) + 
+  geom_density(fill = 'red') +
+  labs(title = 'KDE of Degrees in the Yeast Network')
+```
+
+```{r}
+df %>% 
+  ggplot(aes(x = degree, y = ..density..)) + 
+  geom_histogram(binwidth = 1, fill = 'blue') +
+  labs(title = 'Histogram of Degrees in the Yeast Network')
+```
+
+```{r}
+df %>% 
+  filter(degree <= 20) %>% 
+  ggplot(aes(x = degree, y = ..density..)) + 
+  geom_density(fill = 'red') + 
+  labs(title = 'KDE of Degrees in the Yeast Network',
+       subtitle = TeX('for Nodes with Degree $\\leq 20$'))
+```
+
+```{r}
+df %>% 
+  filter(degree <= 20) %>% 
+  ggplot(aes(x = degree, y = ..density..)) + 
+  geom_histogram(binwidth = 1, fill = 'blue') +
+  labs(title = 'Histogram of Degrees in the Yeast Network',
+       subtitle = TeX('for Nodes with Degree $\\leq 20$'))
+```
+
+## Fig. 2.18(b) on p. 66
+
+```{r, message = FALSE}
+df %>% 
+  group_by(degree) %>% 
+  summarise(cc_deg = mean(clustering, na.rm = TRUE)) %>%
+  ungroup() %>%
+  ggplot(aes(x = degree, y = cc_deg)) + 
+  geom_point(na.rm = TRUE, color = 'blue') + 
+  scale_x_log10() + 
+  scale_y_log10() +
+  labs(title = 'Relation Between Local Clustering Coefficient and Degree',
+       subtitle = 'in the Yeast Network') +
+  labs(x = TeX('$p_k$'), y = TeX('$C_k$'))
+```
+
+## Local Clustering Coefficient Distribution
+
+```{r}
+df %>% 
+  ggplot(aes(x = clustering, y = ..density..)) + 
+  geom_density(fill = 'red', na.rm = TRUE) +
+  labs(title = 'KDE of Local Clustering Coefficients in the Yeast Network')
+```  
+
+```{r}
+df %>% 
+ggplot(aes(x = clustering, y = ..density..)) + 
+  geom_histogram(binwidth = .1, fill = 'blue', na.rm = TRUE) +
+  labs(title = 'Histogram of Local Clustering Coefficients in the Yeast Network')
+```
+
+```{r}
+log(gorder(g)) / log(mean(df$degree))
+
+mean_distance(g, directed = FALSE, unconnected = TRUE)
+
+diameter(g)
+```
+
+```{r, message = FALSE}
+C <- mean(df$clustering, na.rm = TRUE)
+
+M <- mean(df$degree)
+
+df %>%
+  group_by(degree) %>% 
+  summarise(cc_deg = mean(clustering)) %>%
+  ungroup()
+```
+
+## Fig. 3.13(d) on p. 96
+
+```{r, message = FALSE}
+df %>% 
+  group_by(degree) %>% 
+  summarise(cc_deg = mean(clustering)) %>% 
+  ggplot(aes(x = degree, y = cc_deg)) + 
+  geom_point(na.rm = TRUE, color = 'blue') + 
+  geom_line(aes(y = C), color = 'blue') + 
+  geom_line(aes(y = M / gorder(g)), color = 'red') + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  labs(title =  'Relation Between Local Clustering Coefficient and Degree',
+       subtitle = 'The blue line is the average local clustering coefficient; \nthe red one is the one predicted by the random model.') +
+  labs(x = 'k', y = TeX('$C(k)$'))
+```
+
+## Visualizing Other Relations with Degree
+
+```{r}
+df %>% 
+  ggplot(aes(x = degree, y = betweenness)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'red') + 
+  labs(title = 'Relationship Between Betweenness Centrality and Degree')
+```
+
+```{r}
+df %>% 
+  ggplot(aes(x = degree, y = betweenness + 0.00000001)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'red') + 
+  scale_y_log10() +
+  labs(title = TeX('Relationship Between $\\log_{10}$ of Betweenness Centrality and Degree')) +
+  labs(y = '$\\log_{10}$(betweenness)')
+```
+
+```{r}
+df %>% 
+  filter(betweenness > 0) %>% 
+  ggplot(aes(x = degree, y = betweenness)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'red') + 
+  scale_y_log10() +
+  labs(title = TeX('Relationship Between $\\log_{10}$ of Betweenness Centrality and Degree')) +
+  labs(y = TeX('$\\log_{10}$(betweenness)'))
+```
+
+```{r}
+df %>% 
+  ggplot(aes(x = degree, y = eccentricity)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'orange') + 
+  labs(title = 'Relationship Between Eccentricity and Degree')
+```
+
+```{r}
+df %>% 
+  ggplot(aes(x = degree, y = clustering)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'blue') +
+  labs(title = 'Relationship Between Local Clustering Coefficient and Degree')
+```

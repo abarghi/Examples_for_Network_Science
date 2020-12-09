@@ -1,0 +1,384 @@
+---
+title: 'Chap. 5: The Barabasi-Albert Model'
+subtitle: 'Examples for Teaching from *Network Science*, by Albert-Laszlo Barabasi, Cambridge University Press, 2016' 
+author: 'Amir Barghi'
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# configuring figure size
+options(repr.plot.width = 6, repr.plot.height = 4)
+```
+
+# Loading Packages
+
+```{r}
+# uncomment the following lines if you have not installed qdread/forestscaling; 
+
+#install.packages('remotes')
+#remotes::install_github('qdread/forestscaling')
+```
+
+```{r, message = FALSE}
+library(tidyverse)
+
+library(igraph)
+
+library(igraphdata)
+
+library(ggraph)
+
+library(e1071)
+
+library(forestscaling)
+
+library(glue)
+
+library(latex2exp)
+```
+
+# 5.3 The Barabasi-Albert Model 
+
+```{r}
+set.seed(42)
+# the order of the graph
+n <- 10
+# the number of edges to be added at each step
+for (m in c(2, 4, 8, 16, 32)) {
+  
+  g <- sample_pa(n, m = m, directed = FALSE, algorithm = 'psumtree')
+
+  plot(g, 
+       layout = layout_in_circle, 
+       vertex.size = 2, 
+       vertex.label = NA, 
+       edge.lty = 3,
+       main = 'An Example of Barabasi-Albert Model',
+       sub = glue('with ', n, ' Nodes and ', m, ' Edges Added at Each Step'))
+  
+  writeLines('\n')
+
+}
+```
+
+```{r}
+set.seed(42)
+
+n <- 100
+
+for (m in c(2, 4, 8, 16, 32)) {
+  
+ g <- sample_pa(n, m = m, directed = FALSE, algorithm = 'psumtree')
+
+plot(g, 
+     layout = layout_in_circle, 
+     vertex.size = 2, 
+     vertex.label = NA, 
+     edge.lty = 3,
+     main = 'An Example of Barabasi-Albert Model',
+     sub = glue('with ', n, ' Nodes and ', m, ' Edges Added at Each Step'))
+ 
+ writeLines('\n')
+ 
+}
+```
+
+```{r}
+set.seed(42)
+
+n <- 100
+
+DF <- NULL
+
+for (m in c(2, 4, 8, 16, 32)) {
+  
+  g <- sample_pa(n, m = m, directed = FALSE, algorithm = 'psumtree')
+    
+  print(ggraph(g, layout = 'circle') + 
+          geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) +
+          geom_node_point(color = 'dark red', size = 2, alpha = 0.75) + 
+          theme_graph(base_family = 'Helvetica') +
+          labs(title = 'An Example of Barabasi-Albert Model',
+               subtitle = glue('with ', n, ' Nodes and ', m, ' Edges Added at Each Step')))
+  
+  writeLines('\n')
+
+  suppressMessages(df <- bind_cols(enframe(eccentricity(g)), 
+                                   enframe(betweenness(g)), 
+                                   enframe(degree(g)), 
+                                   enframe(transitivity(g, type = c('local')))))
+  
+  df <- df %>% select(name...1, value...2, value...4, value...6, value...8)
+
+  names(df) <- c('name', 'eccentricity', 'betweenness', 'degree', 'clustering')
+  
+  DF2 <- df %>% 
+    summarize(m = m,
+              avg_deg = mean(degree), 
+              delta = max(degree), 
+              diam = max(eccentricity), 
+              radius = min(eccentricity), 
+              avg_cc = mean(clustering, na.rm = TRUE), 
+              exponent = fit_power_law(degree, implementation = 'plfit')$alpha)
+  
+  DF <- rbind(DF, DF2)
+}
+
+DF
+```
+
+```{r}
+set.seed(42)
+
+n <- 1000
+
+DF <- NULL
+
+for (m in c(2, 4, 8, 16, 32)) {
+  
+  g <- sample_pa(n, m = m, directed = FALSE, algorithm = 'psumtree')
+    
+  print(ggraph(g, layout = 'circle') + 
+        geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+        geom_node_point(color = 'dark red', size = 2, alpha = 0.75) + 
+        theme_graph(base_family = 'Helvetica') +
+        labs(title = 'An Example of Barabasi-Albert Model',
+             subtitle = glue('with ', n, ' Nodes and ', m, ' Edges Added at Each Step')))
+  
+  writeLines('\n')
+
+  suppressMessages(df <- bind_cols(enframe(eccentricity(g)), 
+                                   enframe(betweenness(g)), 
+                                   enframe(degree(g)), 
+                                   enframe(transitivity(g, type = c('local')))))
+  
+  df <- df %>% select(name...1, value...2, value...4, value...6, value...8)
+
+  names(df) <- c('name', 'eccentricity', 'betweenness', 'degree', 'clustering')
+  
+  DF2 <- df %>% 
+    summarize(m = m,
+              avg_deg = mean(degree), 
+              delta = max(degree), 
+              diam = max(eccentricity),
+              radius = min(eccentricity),
+              avg_cc = mean(clustering, na.rm = TRUE), 
+              exponent = fit_power_law(degree, implementation = 'plfit')$alpha)
+  
+  DF <- rbind(DF, DF2)
+}
+
+DF
+```
+
+```{r}
+set.seed(42)
+
+n <- 1000
+
+for (m in c(2, 4, 8, 16, 32)) {
+  
+  g <- sample_pa(n, m = m, directed = FALSE, algorithm = 'psumtree')
+
+  df <- enframe(degree(g))
+  
+  df <- df %>% select(name, value)
+
+  names(df) <- c('name', 'degree')
+  
+  exponent <- fit_power_law(df$degree, implementation = 'plfit')$alpha
+  
+  df2 <- logbin(df$degree, n = 100)
+  
+  total2 <- sum(df2$bin_value)
+
+  print(df2 %>% 
+          filter(bin_count != 0) %>% 
+          ggplot(aes(x = bin_midpoint, y = bin_value / total2)) + 
+          geom_point(color = 'blue', size = .5) + 
+          geom_line(data = df, 
+                    aes(x = degree, y = 2 * m ** (exponent - 1) * (degree) ** (-exponent)), 
+                    color = 'red') + 
+          geom_line(data = df, 
+                    aes(x = degree, y = 2 * m ** 2 * (degree) **(-3)), 
+                    color = 'yellow') + 
+          scale_x_log10() + 
+          scale_y_log10() +
+          labs(y = TeX('$p_k$')) +
+          labs(title = 'Log-Log Scale, Linear Binning for Degree Distribution',
+               subtitle = glue('with Fitted Power Law Curves (Eq. 5.9: Red; Eq. 5.15: Yellow) in a Barabasi-Albert Graph \nwith ', n, ' Nodes and ',  m, ' Edges Added at Each Step')))
+  
+  writeLines('\n')
+
+}
+```
+
+# 5.5 Degree Distribution
+
+```{r}
+set.seed(42)
+
+n <- 100
+
+for (power in c(0, 0.5, 1, 1.5, 2, 2.5, 3)) {
+  
+  g <- sample_pa(n, power = power, directed = FALSE, algorithm = 'psumtree')
+
+  plot(g, 
+     layout = layout_in_circle, 
+     vertex.size = 2, 
+     vertex.label = NA, 
+     edge.lty = 3,
+     main = 'An Example of Barabasi-Albert Model',
+     sub = glue('with ', n, ' Nodes and the Power of Preferential Attachment of ', power))
+  
+  writeLines('\n')
+
+}
+```
+
+```{r}
+set.seed(42)
+
+n <- 100
+
+DF <- NULL
+# the power of the preferential attachment
+for (power in c(0, 0.5, 1, 1.5, 2, 2.5, 3))  {
+  
+  m <- 8
+  
+  g <- sample_pa(n, m = m, power = power, directed = FALSE, algorithm = 'psumtree')
+    
+ print(ggraph(g, layout = 'circle') + 
+          geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+          geom_node_point(color = 'dark red', size = 2, alpha = 0.75) + 
+          theme_graph(base_family = 'Helvetica') +
+          labs(title = 'An Example of Barabasi-Albert Model',
+               subtitle = glue('with ', n, ' Nodes, ', m, ' Edges Added at Each Step, \nand the Power of Preferential Attachment of ', power)))
+  
+  writeLines('\n')
+
+  suppressMessages(df <- bind_cols(enframe(eccentricity(g)), 
+                                   enframe(betweenness(g)), 
+                                   enframe(degree(g)), 
+                                   enframe(transitivity(g, type = c('local')))))
+  
+  df <- df %>% select(name...1, value...2, value...4, value...6, value...8)
+
+  names(df) <- c('name', 'eccentricity', 'betweenness', 'degree', 'clustering')
+  
+  DF2 <- df %>% 
+    summarize(power = power,
+              avg_deg = mean(degree), 
+              delta = max(degree), 
+              diam = max(eccentricity),
+              radius = min(eccentricity),
+              avg_cc = mean(clustering, na.rm = TRUE), 
+              exponent = fit_power_law(degree, implementation = 'plfit')$alpha)
+  
+  DF <- rbind(DF, DF2)
+  
+}
+
+DF
+```
+
+```{r}
+set.seed(42)
+
+n <- 500
+
+DF <- NULL
+
+for (power in c(0, 0.5, 1, 1.5, 2, 2.5, 3)) {
+  
+  m <- 8
+  
+  g <- sample_pa(n, m = m , power = power, directed = FALSE, algorithm = 'psumtree')
+    
+  print(ggraph(g, layout = 'circle') + 
+          geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+          geom_node_point(color = 'dark red', size = 2, alpha = 0.75) + 
+          theme_graph(base_family = 'Helvetica') +
+          labs(title = 'An Example of Barabasi-Albert Model',
+               subtitle = glue('with ', n, ' Nodes, ', m, ' Edges Added at Each Step, \nand the Power of Preferential Attachment of ', power)))
+  
+  writeLines('\n')
+
+  suppressMessages(df <- bind_cols(enframe(eccentricity(g)), 
+                                   enframe(betweenness(g)), 
+                                   enframe(degree(g)), 
+                                   enframe(transitivity(g, type = c('local')))))
+  
+  df <- df %>% select(name...1, value...2, value...4, value...6, value...8)
+
+  names(df) <- c('name', 'eccentricity', 'betweenness', 'degree', 'clustering')
+  
+  DF2 <- df %>% 
+    summarize(power = power,
+              avg_deg = mean(degree), 
+              delta = max(degree), 
+              diam = max(eccentricity),
+              radius = min(eccentricity),
+              avg_cc = mean(clustering, na.rm = TRUE), 
+              exponent = fit_power_law(degree, implementation = 'plfit')$alpha)
+  
+  DF <- rbind(DF, DF2)
+  
+}
+
+DF
+```
+
+```{r}
+set.seed(42)
+
+n <- 1000
+
+for (power in c(0, 0.5, 1, 1.5, 2, 2.5, 3)) {
+  
+  m <- 8
+  
+  g <- sample_pa(n, m = m, power = power, directed = FALSE, algorithm = 'psumtree')
+
+  df <- enframe(degree(g))
+  
+  df <- df %>% select(name, value)
+
+  names(df) <- c('name', 'degree')
+  
+  exponent <- fit_power_law(df$degree, implementation = 'plfit')$alpha
+  
+  df2 <- logbin(df$degree, n = 100)
+  
+  total2 <- sum(df2$bin_value)
+
+  print(df2 %>% 
+          filter(bin_count != 0) %>% 
+          ggplot(aes(x = bin_midpoint, y = bin_value / total2)) + 
+          geom_point(color = 'blue', size = .5) + 
+          geom_line(data = df, 
+                    aes(x = degree, y = 2 * m ** (exponent - 1) * (degree) ** (-exponent)), 
+                    color = 'red') + 
+          geom_line(data = df, 
+                    aes(x = degree, y = 2 * m ** 2 * (degree) **(-3)), 
+                    color = 'yellow') + 
+          scale_x_log10() + 
+          scale_y_log10() + 
+          labs(y = TeX('$p_k$'), x = 'k') +
+          labs(title = 'Log-Log Scale, Linear Binning for Degree Distribution',
+               subtitle = glue('with Fitted Power Law Curves (Eq. 5.9: Red; Eq. 5.15: Yellow) in a Barabasi-Albert Graph \nwith ', n, ' Nodes, ',  m, ' Edges Added at Each Step, \nand the Power of Preferential Attachment of ', power)))
+  
+  writeLines('\n')
+
+}
+```

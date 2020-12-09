@@ -1,0 +1,300 @@
+---
+title: 'Fly (*Drosophila Medulla*) Connectome'
+subtitle: 'Examples for Teaching from *Network Science*, by Albert-Laszlo Barabasi, Cambridge University Press, 2016' 
+author: 'Amir Barghi'
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Packages
+
+```{r, message = FALSE}
+library(tidyverse)
+
+library(igraph)
+
+library(igraphdata)
+
+library(ggraph)
+
+library(latex2exp)
+```
+
+# Loading the Data Set
+
+## Data from [NeuroData's Graph DataBase](https://neurodata.io/project/connectomes/)
+
+```{r}
+g <- read_graph('https://s3.amazonaws.com/connectome-graphs/fly/drosophila_medulla_1.graphml', 
+                format = 'graphml')
+```
+
+```{r}
+V(g)
+
+E(g)
+
+components(g)$no
+
+components(g)$csize
+
+glimpse(vertex_attr(g))
+
+glimpse(edge_attr(g))
+
+vertex_attr(g, name = 'name')[1:10]
+
+edge_attr(g, name = 'proofreading.details')[1:10]
+```
+
+# Visualizing the Fly Connectome
+
+```{r}
+set.seed(42)
+
+ggraph(g, layout = 'lgl') + 
+  geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+  geom_node_point(color = 'dark red', size = 1, alpha = 0.75) + 
+  theme_graph(base_family = 'Helvetica') +
+  labs(title = 'Fly Connectome',
+       subtitle = 'Displayed Using Layout Generator for Larger Graphs')
+```
+
+```{r}
+set.seed(42)
+
+ggraph(g, layout = 'drl') + 
+  geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+  geom_node_point(color = 'dark red', size = 1, alpha = 0.75) + 
+  theme_graph(base_family = 'Helvetica') +
+  labs(title = 'Fly Connectome',
+       subtitle = 'Displayed Using Distributed Recursive Layout')
+```
+
+```{r}
+set.seed(42)
+
+ggraph(g, layout = 'mds') + 
+  geom_edge_fan(edge_linetype = 3, color = 'dark blue', alpha = 0.25) + 
+  geom_node_point(color = 'dark red', size = 1, alpha = 0.75) + 
+  theme_graph(base_family = 'Helvetica') +
+  labs(title = 'Fly Connectome',
+       subtitle = 'Displayed Using Multidimensional Scaling Layout')
+```
+
+# Summary Statistics of the Fly Connectome
+
+```{r}
+suppressMessages(df <- bind_cols(enframe(eccentricity(g, mode = 'out')), 
+                                 enframe(betweenness(g)), 
+                                 enframe(degree(g, mode = 'out')), 
+                                 enframe(transitivity(g, type = c('local')))))
+
+df <- df %>% select(name...1, value...2, value...4, value...6, value...8)
+
+names(df) <- c('name', 'eccentricity', 'betweenness', 'outdegree', 'clustering')
+
+head(df)
+
+tail(df)
+
+glimpse(df)
+```
+
+```{r}
+df %>% 
+  summarize(avg_deg = mean(outdegree), 
+            delta = max(outdegree), 
+            prop = sum(outdegree <= avg_deg) / n(), 
+            diam = max(eccentricity),
+            radius = min(eccentricity),
+            avg_cc = mean(clustering, na.rm = TRUE),
+            avg_distance = mean_distance(g, directed = TRUE, unconnected = TRUE))
+```
+
+```{r}
+(d <- mean_distance(g, directed = TRUE, unconnected = TRUE))
+
+mean(distances(g))
+```
+
+## Fig. 2.18(a) on p. 66
+
+```{r}
+distance_table(g)
+
+D <- data.frame(1:length(distance_table(g)$res), 
+                distance_table(g)$res / sum(distance_table(g)$res))
+
+names(D) <- c('x', 'y')
+
+D %>% 
+  ggplot(aes(x = x, y = y)) + 
+  geom_point() + 
+  geom_line(aes(x = d), color = 'blue') +
+  labs(title = 'Distribution of Distance (Proportions) in the Fly Connectome') +
+  labs(x = 'distance', y = 'density')
+```
+
+## The Outdegree Distribution 
+
+```{r}
+df %>% 
+  ggplot(aes(x = outdegree, y = ..density..)) + 
+  geom_density(fill = 'red') +
+  labs(title = 'KDE of Outdegrees in the Fly Connectome')
+```
+
+```{r}
+df %>% 
+  ggplot(aes(x = outdegree, y = ..density..)) + 
+  geom_histogram(binwidth = 1, fill = 'blue') +
+  labs(title = 'Histogram of Outdegrees in the Fly Connectome')
+```
+
+```{r}
+df %>% 
+  filter(outdegree <= 20) %>% 
+  ggplot(aes(x = outdegree, y = ..density..)) + 
+  geom_density(fill = 'red') + 
+  labs(title = 'KDE of Outdegrees in the Fly Connectome',
+       subtitle = TeX('for Nodes with Outdegree $\\leq 20$'))
+```
+
+```{r}
+df %>% 
+  filter(outdegree <= 20) %>% 
+  ggplot(aes(x = outdegree, y = ..density..)) + 
+  geom_histogram(binwidth = 1, fill = 'blue') +
+  labs(title = 'Histogram of Outdegrees in the Fly Connectome',
+       subtitle = TeX('for Nodes with Outdegree $\\leq 20$'))
+```
+
+## Fig. 2.18(b) on p. 66
+
+```{r, message = FALSE}
+df %>% 
+  group_by(outdegree) %>% 
+  summarise(cc_deg = mean(clustering, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(outdegree > 0) %>%
+  ggplot(aes(x = outdegree, y = cc_deg)) + 
+  geom_point(na.rm = TRUE, color = 'blue') + 
+  scale_x_log10() + 
+  scale_y_log10() +
+  labs(title = 'Relation Between Local Clustering Coefficient and Outdegree',
+       subtitle = 'in the Fly Connectome') +
+  labs(x = TeX('$p_k$'), y = TeX('$C_k$'))
+```
+
+## Local Clustering Coefficient Distribution
+
+```{r}
+df %>% 
+  ggplot(aes(x = clustering, y = ..density..)) + 
+  geom_density(fill = 'red', na.rm = TRUE) +
+  labs(title = 'KDE of Local Clustering Coefficients in the Fly Connectome')
+```  
+
+```{r}
+df %>% 
+ggplot(aes(x = clustering, y = ..density..)) + 
+  geom_histogram(binwidth = .1, fill = 'blue', na.rm = TRUE) +
+  labs(title = 'Histogram of Local Clustering Coefficients in the Fly Connectome')
+```
+
+```{r}
+log(gorder(g)) / log(mean(df$outdegree))
+
+mean_distance(g, directed = TRUE, unconnected = TRUE)
+
+diameter(g)
+```
+
+```{r, message = FALSE}
+C <- mean(df$clustering, na.rm = TRUE)
+
+M <- mean(df$outdegree)
+
+df %>%
+  group_by(outdegree) %>% 
+  summarise(cc_deg = mean(clustering)) %>%
+  ungroup()
+```
+
+## Fig. 3.13(d) on p. 96
+
+```{r, message = FALSE}
+df %>% 
+  group_by(outdegree) %>% 
+  summarise(cc_deg = mean(clustering)) %>%
+  filter(outdegree > 0) %>%
+  ggplot(aes(x = outdegree, y = cc_deg)) + 
+  geom_point(na.rm = TRUE, color = 'blue') + 
+  geom_line(aes(y = C), color = 'blue') + 
+  geom_line(aes(y = M / gorder(g)), color = 'red') + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  labs(title =  'Relation Between Local Clustering Coefficient and Outdegree',
+       subtitle = 'The blue line is the average local clustering coefficient; \nthe red one is the one predicted by the random model.') +
+  labs(x = 'k', y = TeX('$C(k)$'))
+```
+
+## Visualizing Other Relations with Outdegree
+
+```{r}
+df %>%
+  filter(outdegree > 0) %>%
+  ggplot(aes(x = outdegree, y = betweenness)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'red') + 
+  scale_x_log10() +
+  labs(title = 'Relationship Between Betweenness Centrality and Outdegree') +
+  labs(x = TeX('$\\log_{10}$(outdegree)'))
+```
+
+```{r}
+df %>% 
+  filter(outdegree > 0) %>%
+  ggplot(aes(x = outdegree, y = betweenness + 0.00000001)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'red') + 
+  scale_y_log10() +
+  labs(title = TeX('Relationship Between $\\log_{10}$ of Betweenness Centrality and Outdegree')) +
+  labs(y = TeX('$\\log_{10}$(betweenness)'))
+```
+
+```{r}
+df %>% 
+  filter(betweenness > 0, outdegree > 0) %>% 
+  ggplot(aes(x = outdegree, y = betweenness)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'red') + 
+  scale_y_log10() +
+  scale_x_log10() +
+  labs(title = TeX('Relationship Between $\\log_{10}$ of Betweenness Centrality and $\\log_{10}$ of Outdegree')) +
+  labs(y = TeX('$\\log_{10}$(betweenness)'),
+       x = TeX('$\\log_{10}$(outdegree)'))
+```
+
+```{r}
+df %>% 
+  filter(outdegree > 0) %>%
+  ggplot(aes(x = outdegree, y = eccentricity)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'orange') + 
+  scale_x_log10() +
+  labs(title = TeX('Relationship Between Eccentricity and $\\log_{10}$ of Outdegree')) +
+  labs(x = TeX('$\\log_{10}$(outdegree)'))
+
+```
+
+```{r}
+df %>% 
+  filter(outdegree > 0) %>%
+  ggplot(aes(x = outdegree, y = clustering)) + 
+  geom_point(na.rm = TRUE, size = 0.5, color = 'blue') +
+  scale_x_log10() +
+  labs(title = TeX('Relationship Between Local Clustering Coefficient and $\\log_{10}$ of Outdegree')) +
+  labs(x = TeX('$\\log_{10}$(outdegree)'))
+```
