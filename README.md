@@ -1,4 +1,4 @@
-# Examples for Network Science
+# Examples in R for Teaching from *Network Science*
 
 ### Examples Written in R for Teaching from *Network Science*, by Albert-Laszlo Barabasi, Cambridge University Press, 2016
 
