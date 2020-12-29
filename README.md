@@ -4,4 +4,4 @@
 
 These examples were used for teaching MA 217: Applied Graph Theory at Saint Michael's College in Colchester, Vermont, USA, in Spring 2020. 
 
-The repository contains Jupyter notebooks (`.ipynb`) and RMarkdown files (`.rmd`). Knitted RMarkdown may be found on RPubs <a href = 'https://rpubs.com/abarghi'>here</a>.
+The repository contains Jupyter notebooks (`.ipynb`) and RMarkdown files (`.rmd`). Knitted RMarkdown files may be found on RPubs <a href = 'https://rpubs.com/abarghi'>here</a>.
