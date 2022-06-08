@@ -1,10 +1,14 @@
 ---
-title: 'Fly (*Drosophila Medulla*) Connectome'
-subtitle: 'Examples for Teaching from *Network Science*, by Albert-Laszlo Barabasi, Cambridge University Press, 2016' 
-author: 'Amir Barghi'
+title: 'Using R in Teaching from *Network Science*'
+author: "Amir Barghi, Department of Mathematics and Statistics, Saint Michael's College"
 output:
-  html_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+  pdf_document: default
 ---
+
+# Fly (*Drosophila Medulla*) Connectome
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -27,6 +31,8 @@ library(latex2exp)
 # Loading the Data Set
 
 ## Data from [NeuroData's Graph DataBase](https://neurodata.io/project/connectomes/)
+
+Data Source: Takemura, Sy., Bharioke, A., Lu, Z. et al. A visual motion detection circuit suggested by Drosophila connectomics. *Nature* **500**, 175–181 (2013). https://doi.org/10.1038/nature12450
 
 ```{r}
 g <- read_graph('https://s3.amazonaws.com/connectome-graphs/fly/drosophila_medulla_1.graphml', 
@@ -298,3 +304,8 @@ df %>%
   labs(title = TeX('Relationship Between Local Clustering Coefficient and $\\log_{10}$ of Outdegree')) +
   labs(x = TeX('$\\log_{10}$(outdegree)'))
 ```
+
+# References
+
+- Albert-Laszlo Barabasi, *Network Science*, Cambridge University Press, 2016. *Network Science* is available online at http://networksciencebook.com/ under the following license: "This book's text and illustrations are licensed under a [Creative Commons Attribution-NonCommercial 3.0 Unported License](https://creativecommons.org/licenses/by-nc/3.0/)."
+- Takemura, Sy., Bharioke, A., Lu, Z. et al. A visual motion detection circuit suggested by Drosophila connectomics. *Nature* **500**, 175–181 (2013). https://doi.org/10.1038/nature12450

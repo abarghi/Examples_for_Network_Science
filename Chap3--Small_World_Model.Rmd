@@ -1,13 +1,14 @@
 ---
-title: 'Chap. 3: Random Networks -- Small Worlds'
-subtitle: 'Examples for Teaching from *Network Science*, by Albert-Laszlo Barabasi, Cambridge University Press, 2016' 
-author: 'Amir Barghi'
+title: 'Using R in Teaching from *Network Science*'
+author: "Amir Barghi, Department of Mathematics and Statistics, Saint Michael's College"
 output:
   html_document:
     df_print: paged
   word_document: default
   pdf_document: default
 ---
+
+# Chap. 3: Random Networks -- Small Worlds
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -339,3 +340,7 @@ df %>%
                        ' Neighbors Clockwise Originally')) +
   scale_x_log10()
 ```
+
+# References
+
+- Albert-Laszlo Barabasi, *Network Science*, Cambridge University Press, 2016. *Network Science* is available online at http://networksciencebook.com/ under the following license: "This book's text and illustrations are licensed under a [Creative Commons Attribution-NonCommercial 3.0 Unported License](https://creativecommons.org/licenses/by-nc/3.0/)."

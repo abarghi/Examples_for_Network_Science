@@ -1,10 +1,14 @@
 ---
-title: 'Yeast Protein Interaction Network'
-subtitle: 'Examples for Teaching from *Network Science*, by Albert-Laszlo Barabasi, Cambridge University Press, 2016' 
-author: 'Amir Barghi'
+title: 'Using R in Teaching from *Network Science*'
+author: "Amir Barghi, Department of Mathematics and Statistics, Saint Michael's College"
 output:
-  html_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+  pdf_document: default
 ---
+
+# Yeast Protein Interaction Network
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -24,7 +28,11 @@ library(ggraph)
 library(latex2exp)
 ```
 
-# Loading the Data Set `igraphdata::yeast`
+# Loading the Data Set 
+
+## Data from [`igraphdata::yeast`](https://github.com/igraph/igraphdata)
+
+Data Source: von Mering, C., Krause, R., Snel, B. et al. Comparative assessment of large-scale data sets of protein–protein interactions. *Nature* **417**, 399–403 (2002). https://doi.org/10.1038/nature750
 
 ```{r}
 data(yeast)
@@ -282,3 +290,8 @@ df %>%
   geom_point(na.rm = TRUE, size = 0.5, color = 'blue') +
   labs(title = 'Relationship Between Local Clustering Coefficient and Degree')
 ```
+
+# References
+
+- Albert-Laszlo Barabasi, *Network Science*, Cambridge University Press, 2016. *Network Science* is available online at http://networksciencebook.com/ under the following license: "This book's text and illustrations are licensed under a [Creative Commons Attribution-NonCommercial 3.0 Unported License](https://creativecommons.org/licenses/by-nc/3.0/)."
+- von Mering, C., Krause, R., Snel, B. et al. Comparative assessment of large-scale data sets of protein–protein interactions. *Nature* **417**, 399–403 (2002). https://doi.org/10.1038/nature750

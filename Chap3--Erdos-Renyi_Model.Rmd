@@ -1,13 +1,14 @@
 ---
-title: 'Chap. 3: Random Networks -- Erdos-Renyi'
-subtitle: 'Examples for Teaching from *Network Science*, by Albert-Laszlo Barabasi, Cambridge University Press, 2016' 
-author: 'Amir Barghi'
+title: 'Using R in Teaching from *Network Science*'
+author: "Amir Barghi, Department of Mathematics and Statistics, Saint Michael's College"
 output:
   html_document:
     df_print: paged
   word_document: default
   pdf_document: default
 ---
+
+# Chap. 3: Random Networks -- Erdos-Renyi
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -51,7 +52,7 @@ plot(g,
      vertex.size = 2, 
      vertex.label = NA, 
      edge.lty = 3,
-     main = TeX(glue('An Example of $G(N, \\, p)$ Model for $n = $', n, ' and $p = $', p)))
+     main = TeX(glue('An Example of $G(N, \\, p)$ Model for $N = $', n, ' and $p = $', p)))
 
 # using ggraph to visualize a graph 
 ggraph(g, layout = 'circle') + 
@@ -376,3 +377,7 @@ df %>%
   labs(title = TeX('KDE of Local Clustering Coefficient for $G(N, \\, p)$'),
        subtitle = TeX(glue('$N = $', n, ' and $p = $', p)))
 ```
+
+# References
+
+- Albert-Laszlo Barabasi, *Network Science*, Cambridge University Press, 2016. *Network Science* is available online at http://networksciencebook.com/ under the following license: "This book's text and illustrations are licensed under a [Creative Commons Attribution-NonCommercial 3.0 Unported License](https://creativecommons.org/licenses/by-nc/3.0/)."
