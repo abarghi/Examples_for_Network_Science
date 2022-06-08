@@ -8,4 +8,4 @@ The repository contains Jupyter notebooks (`.ipynb`) and RMarkdown files (`.rmd`
 
 # References
 
-- Albert-Laszlo Barabasi, *Network Science*, Cambridge University Press, 2016. *Network Science* is made avaialble online at http://networksciencebook.com/ under the following license: This book's text and illustrations are licensed under a [Creative Commons Attribution-NonCommercial 3.0 Unported License](https://creativecommons.org/licenses/by-nc/3.0/).
+- Albert-Laszlo Barabasi, *Network Science*, Cambridge University Press, 2016. *Network Science* is avaialble online at http://networksciencebook.com/ under the following license: "This book's text and illustrations are licensed under a [Creative Commons Attribution-NonCommercial 3.0 Unported License](https://creativecommons.org/licenses/by-nc/3.0/)."
