@@ -1,4 +1,4 @@
-# Using R in Teaching from *Network Science*
+#  Using R in an Applied Graph Theory Course
 
 ### Examples Written in R for Teaching from *Network Science*, by Albert-Laszlo Barabasi 
 
