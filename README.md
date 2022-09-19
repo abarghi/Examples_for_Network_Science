@@ -58,31 +58,31 @@ available from the book's website.
 According to Sayama et al. (2015), another essential concept of network
 literacy is that "Today's computer technology allows you to study
 real-world networks.\" So to make the course pedagogically and
-technologically interactive, I decided to use R[^4] in the classroom. I
+technologically interactive, I decided to use [R](https://www.r-project.org/) in the classroom. I
 chose R because it is an open-source and free statistical and
 programming software and, along with Python, is one of the popular
-choices in the data science community. To this end, I created R
-Markdown[^5] files for the chapters I covered (Chapters 3, 4, and 5),
-with a focus on the yeast protein interaction network[^6] from
-`igraph`[^7] package as the main real-world network. The yeast protein
+choices in the data science community. To this end, I created 
+[R Markdown](https://rmarkdown.rstudio.com/) files for the chapters I covered (Chapters 3, 4, and 5),
+with a focus on the [yeast protein interaction network](https://rdrr.io/cran/igraphdata/man/yeast.html)[^4] from
+[`igraph`](https://igraph.org/r/) package as the main real-world network. The yeast protein
 interaction network is an undirected network where the nodes are
 proteins inside a yeast cell and the links are the interactions between
 these proteins.
 
-To run these files, students installed R and RStudio[^8] Desktop (also
+To run these files, students installed R and [RStudio](https://www.rstudio.com/) Desktop (also
 available for free under an open source license) on their computers.
 Since this course does not have a prerequisite where learning R,
-particularly utilizing `tidyverse`[^9], is one of the main objectives, I
-used the following DataCamp[^10] courses as online assignments to bring
+particularly utilizing [`tidyverse`](https://www.tidyverse.org/), is one of the main objectives, I
+used the following [DataCamp](https://www.datacamp.com/) courses as online assignments to bring
 everyone to the same level: Introduction to R; Intermediate R; Network
 Analysis in R; Introduction to the Tidyverse; Case Studies: Network
 Analysis in R. DataCamp is an online platform for learning a plethora of
 data science topics, with a focus on R and Python, and my students had
-free access to these courses through DataCamp for Classrooms[^11].
+free access to these courses through [DataCamp for Classrooms](https://www.datacamp.com/groups/classrooms).
 Having access to these courses, to some extent, addressed the challenge
 of students coming from "diverse computational and coursework
 backgrounds\" as one of the challenges pointed out by Porter (2018)
-[^12] in teaching an undergraduate network science course.
+[^5] in teaching an undergraduate network science course.
 
 On the one hand, I find learning the basics of R and using `tidyverse`
 functions less challenging for someone who has had little to no coding
@@ -95,20 +95,20 @@ and visualize data in R, which makes this applied graph theory course a
 natural sequel for students who want to hone their R skills while
 learning about networks. On the other hand, `igraph` (also available in
 Python and C) is less streamlined and has fewer functionalities than
-`NetworkX`[^13], which is probably the most popular graph theory and
+[`NetworkX`](https://networkx.org/), which is probably the most popular graph theory and
 network science Python package. But for the purposes of this course and
-similar courses, `igraph` is more than sufficient. Moreover, Jupyter
-Notebook[^14], using the R package `IRkernel`[^15], provides a more
+similar courses, `igraph` is more than sufficient. Moreover, [Jupyter
+Notebook](https://jupyter.org/), using the R package [`IRkernel`](https://github.com/IRkernel/IRkernel), provides a more
 interactive alternative to R Markdown for creating narratives and
 lecture notes. This is the reason as to why I posted the Jupyter
 Notebook counterparts of the R Markdown files that I wrote for this
-course on the GitHub[^16] page as well. In addition to a local
-installation of Anaconda Distribution[^17], which is open source, there
+course on the GitHub page as well. In addition to a local
+installation of [Anaconda Distribution](https://www.anaconda.com/products/distribution), which is open source, there
 are several cloud computing platforms where Jupyter Notebooks can be run
 for free.
 
 To emphasize the ideas students learned in class from a more "big
-picture\" perspective, I assigned readings from *Linked* [^18]. *Linked*
+picture\" perspective, I assigned readings from *Linked*[^6]. *Linked*
 is a popular science book written by Albert-László Barabási as well.
 Students read the entire book in segments (spanning two to three weeks
 each), wrote short summaries of what they learned, and shared their
@@ -142,12 +142,12 @@ Exam 2: 18%; Final: 24%.
 
 For the final exam, as a guide, students used the yeast protein
 interaction network file I shared with them, and created a new R
-Markdown file to answer questions about the immunoglobulin interaction
-network[^19] that comes with `igraph` as well. The immunoglobulin
+Markdown file to answer questions about the [immunoglobulin interaction
+network](https://rdrr.io/cran/igraphdata/man/immuno.html)[^7] that comes with `igraph` as well. The immunoglobulin
 interaction networks is an undirected and connected network modeling the
 interactions between amino-acids in the immunoglobulin protein. An
 edited version of the exam is included in Appendix Final. As showcased
-in the fly (*drosophila medulla*) connectome network[^20] file below
+in the [fly (*drosophila medulla*) connectome network](https://neurodata.io/project/connectomes/)[^8] file below
 (see Appendix Code), this final exam can be used for individualized
 final projects as well, where students find a network of their choice
 and explore it by answering the provided questions. Even though the
@@ -161,7 +161,7 @@ Real-world networks have randomness embedded in them to varying degrees
 depending on the context from which they arise. Therefore, creating
 models to study real-world networks require the use of tools from
 probability. By studying the syllabi or course schedules of thirty
-network science courses, mostly postgraduate, Sayama (2018)[^21] shows
+network science courses, mostly postgraduate, Sayama (2018)[^9] shows
 that small-world networks and random networks are the top two topics
 covered in these courses. Moreover, preferential attachment, power-law
 distribution, and scale-free networks rank six to eight, respectively.
@@ -176,11 +176,8 @@ probability $p$. In the second model, know as the $G(N,L)$ model, $L$
 links are randomly selected from all $\binom{N}{2}$ possibilities, where
 $L$ is fixed. The code provides examples of both $G(N,p)$ and $G(N,L)$
 models; see the following figure for $N = 10$, $p = 0.5$, and $L = 22$.
-
-![](g_n_p.png){width="6.5cm"}
-
-![](g_n_l.png){width="6.5cm"}
-
+<center><img src = g_n_p.png width = 400></center>
+<center><img src = g_n_l.png width = 400></center>
 Since the course did not have a probability or statistics prerequisite,
 the code discusses binomial and Poisson distributions (and their
 relation) in detail visually before exploring the degree distribution in
@@ -207,10 +204,8 @@ Watts-Strogatz model, is replicates. As we see in the following figure,
 as $p$ increases from zero to one, there is an earlier sharp drop in
 average degree while the sharp drop for local clustering coefficient
 happens for higher values of $p$.
-
-![](small_world1.png){width="6.5cm"}
-
-![](small_world2.png){width="6.5cm"}
+<center><img src = small_world1.png width = 400></center>
+<center><img src = small_world2.png width = 400></center>
 
 I used the yeast protein interaction network as the real-world example
 to cover some of the topics in Chapter 4 such as hubs, degree exponent,
@@ -223,11 +218,8 @@ the importance of logarithmic binning as opposed to linear binning when
 plotting power law degree sequence in a scatter plot on a log-log scale.
 The code demonstrates the difference between the two types of binning as
 we see in the following figures:
-
-![](log_log_linear.png){width="6.5cm"}
-
-![](log_log_logarithmic.png){width="6.5cm"}
-
+<center><img src = log_log_linear.png width = 400></center>
+<center><img src = log_log_logarithmic.png width = 400></center>
 In linear binning, all the bins have the same width, while in
 logarithmic binning, the width of bins increase logarithmically. Since
 both axes are on a logarithmic scale in the scatter plots in these
@@ -330,14 +322,13 @@ drafts of this paper.
 
 The R Markdown files (along with their Jupyter Notebook counterparts)
 may be found on
-[GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course)[^22]
+[GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course)
 and their rendered HTML files on
-[RPubs](https://rpubs.com/abarghi/)[^23].
+[RPubs](https://rpubs.com/abarghi/).
 
 -   **Chapter 3: Random Networks -- Erdős-Rényi**
 
-    Code on
-    [GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course):
+    Code on GitHub:
 
     -   `Chap3–Erdos-Renyi_Model.Rmd`
 
@@ -348,8 +339,7 @@ and their rendered HTML files on
 
 -   **Chapter 3: Random Networks -- Small Worlds**
 
-    Code on
-    [GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course):
+    Code on GitHub:
 
     -   `Chap3–Small_World_Model.Rmd`
 
@@ -360,8 +350,7 @@ and their rendered HTML files on
 
 -   **Chap. 4: The Scale Free Property**
 
-    Code on
-    [GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course):
+    Code on GitHub:
 
     -   `Chap4.Rmd`
 
@@ -372,8 +361,7 @@ and their rendered HTML files on
 
 -   **Chap. 5: The Barabási-Albert Model**
 
-    Code on
-    [GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course):
+    Code on GitHub:
 
     -   `Chap5.Rmd`
 
@@ -384,8 +372,7 @@ and their rendered HTML files on
 
 -   **Yeast Protein Interaction Network**
 
-    Code on
-    [GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course):
+    Code on GitHub:
 
     -   `Yeast.Rmd`
 
@@ -396,8 +383,7 @@ and their rendered HTML files on
 
 -   **Fly (*Drosophila Medulla*) Connectome Network**
 
-    Code on
-    [GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course):
+    Code on GitHub:
 
     -   `Fly.Rmd`
 
@@ -440,7 +426,7 @@ generated using the `Knitr` button.
 `Yeast.Rmd` as a guide, load the immunoglobulin interaction network
 (`immuno`) that comes with `igraph` and answer the following questions.
 You can read more about this network
-[here](https://rdrr.io/cran/igraphdata/man/immuno.html)[^24]. If you are
+[here](https://rdrr.io/cran/igraphdata/man/immuno.html). If you are
 running `Yeast.Rmd` concurrently with your file to compare results, you
 want to use a short network name other than `g` for the `immuno`
 network, e.g. `h`.
@@ -536,64 +522,33 @@ network, e.g. `h`.
     Commons Attribution-NonCommercial 3.0 Unported
     License](https://creativecommons.org/licenses/by-nc/3.0/).\"
 
-[^4]: <https://www.r-project.org/>
-
-[^5]: <https://rmarkdown.rstudio.com/>
-
-[^6]: <https://rdrr.io/cran/igraphdata/man/yeast.html>; this network is
-    from: C. Von Mering, R. Krause, B. Snel, M. Cornell, S. G. Oliver,
+[^4]: C. Von Mering, R. Krause, B. Snel, M. Cornell, S. G. Oliver,
     S. Fields, and P. Bork. Comparative assessment of large-scale data
     sets of protein--protein interactions. *Nature*, 417(6887):399--403,
     2002.
 
-[^7]: <https://igraph.org/r/>
-
-[^8]: <https://www.rstudio.com/>
-
-[^9]: <https://www.tidyverse.org/>
-
-[^10]: <https://www.datacamp.com/>
-
-[^11]: <https://www.datacamp.com/groups/classrooms>
-
-[^12]: M. A. Porter. An undergraduate mathematics course on networks. In
+[^5]: M. A. Porter. An undergraduate mathematics course on networks. In
     C. B. Cramer, M. A. Porter, H. Sayama, L. Sheetz, and S. M. Uzzo,
     editors, *Network Science In Education: Transformational Approaches
     in Teaching and Learning*, pages 3--21. Springer International
     Publishing, 2018.
 
-[^13]: <https://networkx.org/>
-
-[^14]: <https://jupyter.org/>
-
-[^15]: <https://github.com/IRkernel/IRkernel>
-
-[^16]: <https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course>
-
-[^17]: <https://www.anaconda.com/products/distribution>
-
-[^18]: A.-L. Barabási. *Linked: How Everything Is Connected to
+[^6]: A.-L. Barabási. *Linked: How Everything Is Connected to
     Everything Else and What It Means for Business, Science, and
     Everyday Life*. Basic Books, 2014.
 
-[^19]: <https://rdrr.io/cran/igraphdata/man/immuno.html>; this network
-    is from: D. Gfeller. *Simplifying complex networks: from a
+[^7]: D. Gfeller. *Simplifying complex networks: from a
     clustering to a coarse graining strategy*. PhD thesis, 2007.
 
-[^20]: <https://neurodata.io/project/connectomes/>; this network is from
-    an article by Takemura et al. (2013)[^25]. According to this
-    website, "A 'connectome' is a specific, cell-to-cell mapping of
-    axonal tracts between neurons, created from cellular data like
-    electron microscopy.\"
+[^8]: S. Takemura, A. Bharioke, Z. Lu, A. Nern, S. Vitaladevuni, P. K. Rivlin, W. T.
+       Katz, D. J. Olbris, S. M. Plaza, P. Winston, et al. A visual motion detection
+       circuit suggested by drosophila connectomics. \emph{Nature}, 500(7461):175--181,
+       2013. According to the data set's [website](https://neurodata.io/project/connectomes/), 
+       "A 'connectome' is a specific, cell-to-cell mapping of
+        axonal tracts between neurons, created from cellular data like electron microscopy."
 
-[^21]: H. Sayama. Mapping the curricular structure and contents of
+[^9]: H. Sayama. Mapping the curricular structure and contents of
     network science courses. In C. B. Cramer, M. A. Porter, H. Sayama,
     L. Sheetz, and S. M. Uzzo, editors, *Network Science In Education:
     Transformational Approaches in Teaching and Learning*, pages
     101--116. Springer International Publishing, 2018.
-
-[^22]: <https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course>
-
-[^23]: <https://rpubs.com/abarghi/>
-
-[^24]: <https://rdrr.io/cran/igraphdata/man/immuno.html>
