@@ -312,7 +312,7 @@ Michael's College for the Merit-based Course Reduction Award in Fall
 would also like to thank my colleagues Christopher Desjardins, who is an
 invaluable resource when I have an R-related question, and Joanna
 Ellis-Monaghan, who gave me careful and thorough feedback on earlier
-drafts of this paper.
+drafts of this page.
 
 # Appendix
 
