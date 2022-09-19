@@ -1,8 +1,6 @@
 #  Using R in an Applied Graph Theory Course
 
-## Abstract
-
-This page provides a brief summary of various resources I used in
+> **Abstract** This page provides a brief summary of various resources I used in
 teaching network analysis using R in an undergraduate applied graph
 theory course. I taught the course in Spring 2020 at Saint Michael's
 College, which is a liberal arts college in the Northeast of the United
@@ -81,8 +79,8 @@ data science topics, with a focus on R and Python, and my students had
 free access to these courses through [DataCamp for Classrooms](https://www.datacamp.com/groups/classrooms).
 Having access to these courses, to some extent, addressed the challenge
 of students coming from "diverse computational and coursework
-backgrounds\" as one of the challenges pointed out by Porter (2018)
-[^5] in teaching an undergraduate network science course.
+backgrounds\" as one of the challenges pointed out by Porter (2018)[^5] 
+in teaching an undergraduate network science course.
 
 On the one hand, I find learning the basics of R and using `tidyverse`
 functions less challenging for someone who has had little to no coding
@@ -175,7 +173,7 @@ the $G(N,P)$ model, a link between a pair of nodes exists with a fixed
 probability $p$. In the second model, know as the $G(N,L)$ model, $L$
 links are randomly selected from all $\binom{N}{2}$ possibilities, where
 $L$ is fixed. The code provides examples of both $G(N,p)$ and $G(N,L)$
-models; see the following figure for $N = 10$, $p = 0.5$, and $L = 22$.
+models; see the following figures for $N = 10$, $p = 0.5$, and $L = 22$:
 <center><img src = g_n_p.png width = 400></center>
 <center><img src = g_n_l.png width = 400></center>
 Since the course did not have a probability or statistics prerequisite,
@@ -200,7 +198,7 @@ examples of this model evolve as one increases the rewiring probability.
 In particular, Figure 3.14(d) on p. 97 in *Network Science*, which
 explores the relation between average degree and average local
 clustering coefficient as functions of rewiring probability in the
-Watts-Strogatz model, is replicates. As we see in the following figure,
+Watts-Strogatz model, is replicates. As we see in the following figures,
 as $p$ increases from zero to one, there is an earlier sharp drop in
 average degree while the sharp drop for local clustering coefficient
 happens for higher values of $p$.
@@ -310,7 +308,7 @@ me with a better gauge of what needs to be improved in this course.
 
 I would like to thank the Office of the Dean of the Faculty at Saint
 Michael's College for the Merit-based Course Reduction Award in Fall
-2020 that allowed me to organize the R code mentioned in this paper. I
+2020 that allowed me to organize the R code mentioned in this page. I
 would also like to thank my colleagues Christopher Desjardins, who is an
 invaluable resource when I have an R-related question, and Joanna
 Ellis-Monaghan, who gave me careful and thorough feedback on earlier
@@ -319,12 +317,6 @@ drafts of this paper.
 # Appendix
 
 ## Code
-
-The R Markdown files (along with their Jupyter Notebook counterparts)
-may be found on
-[GitHub](https://github.com/abarghi/Using_R_in_an_Applied_Graph_Theory_Course)
-and their rendered HTML files on
-[RPubs](https://rpubs.com/abarghi/).
 
 -   **Chapter 3: Random Networks -- Erdős-Rényi**
 
@@ -542,7 +534,7 @@ network, e.g. `h`.
 
 [^8]: S. Takemura, A. Bharioke, Z. Lu, A. Nern, S. Vitaladevuni, P. K. Rivlin, W. T.
        Katz, D. J. Olbris, S. M. Plaza, P. Winston, et al. A visual motion detection
-       circuit suggested by drosophila connectomics. \emph{Nature}, 500(7461):175--181,
+       circuit suggested by drosophila connectomics. *Nature*, 500(7461):175--181,
        2013. According to the data set's [website](https://neurodata.io/project/connectomes/), 
        "A 'connectome' is a specific, cell-to-cell mapping of
         axonal tracts between neurons, created from cellular data like electron microscopy."
