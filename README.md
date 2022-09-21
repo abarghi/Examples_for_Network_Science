@@ -82,28 +82,22 @@ of students coming from "diverse computational and coursework
 backgrounds\" as one of the challenges pointed out by Porter (2018)[^5] 
 in teaching an undergraduate network science course.
 
-On the one hand, I find learning the basics of R and using `tidyverse`
-functions less challenging for someone who has had little to no coding
-experience in comparison to learning how to do similar tasks in Python.
-And RStudio provides an interactive platform to work, especially the R
-Markdown feature allows users to generate attractive documents.
-Moreover, one of the required courses for the data science program at
-Saint Michael's College is dedicated to learning how to clean, analyze,
-and visualize data in R, which makes this applied graph theory course a
-natural sequel for students who want to hone their R skills while
-learning about networks. On the other hand, `igraph` (also available in
-Python and C) is less streamlined and has fewer functionalities than
-[`NetworkX`](https://networkx.org/), which is probably the most popular graph theory and
-network science Python package. But for the purposes of this course and
-similar courses, `igraph` is more than sufficient. Moreover, [Jupyter
-Notebook](https://jupyter.org/), using the R package [`IRkernel`](https://github.com/IRkernel/IRkernel), provides a more
-interactive alternative to R Markdown for creating narratives and
-lecture notes. This is the reason as to why I posted the Jupyter
-Notebook counterparts of the R Markdown files that I wrote for this
-course on the GitHub page as well. In addition to a local
-installation of [Anaconda Distribution](https://www.anaconda.com/products/distribution), which is open source, there
-are several cloud computing platforms where Jupyter Notebooks can be run
-for free.
+I find learning the basics of R and using `tidyverse`
+functions less challenging for someone who has had little to no coding 
+experience in comparison to learning how to do similar tasks in Python. 
+And RStudio provides an interactive platform to work, especially the R Markdown 
+feature allows users to generate attractive documents. However, I find [Jupyter
+Notebook](https://jupyter.org/), using the R package [`IRkernel`](https://github.com/IRkernel/IRkernel), 
+to provide a more interactive alternative to R Markdown for creating 
+narratives and lecture notes. This is the reason as to why I posted 
+the Jupyter Notebook counterparts of the R Markdown files that 
+I wrote for this course on this page as well. In addition to a local 
+installation of [Anaconda Distribution](https://www.anaconda.com/products/distribution), 
+which is open source, there are several cloud computing platforms where 
+Jupyter Notebooks can be run for free. Moreover, one possible alternative to 
+`igraph` (also available in Python and C) is 
+[`NetworkX`](https://networkx.org/). However, `NetworkX` is only available in Python, 
+and for the purposes of this course and similar courses, I find `igraph` to be more than sufficient. 
 
 To emphasize the ideas students learned in class from a more "big
 picture\" perspective, I assigned readings from *Linked*[^6]. *Linked*
